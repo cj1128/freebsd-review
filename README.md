@@ -88,3 +88,32 @@
 
   Besides netowrking, there are other ways for interprocess communication which only work for local processes, such as `pipes`, `fifos`, `semaphores`, `message queues` and `shared memory`.
 
+## Chapter 3: Kernel Services
+
+### Exercises
+
+- 3.1: Describe three types of system activity.
+
+  *System activity* is an entry into the kernel. they can be categorized according to the event or action that initiates them:
+
+  + system calls
+  + hardware interrupts
+  + hardware traps
+  + software-initiated interrupts
+  - software-initiated traps
+
+- 3.2: When can a routine executing in the top half of the kernel be preempted? When can it be interrupted?
+
+  The FreeBSD kernel is rarely preempted to run another user process while executing in the top half of the kernel. Although, it will explicitly give up the processer if it must wait for an event or for a shared resource.
+
+  Its execution may be interrupted, however, by the need to run a real-time process or by interruptes for the bottom half of the kernel.
+
+- 3.3: Why are routines executing in the bottom half of the kernel precluded from using information located in the current user process?
+
+  Activities in the bottom half of the kernel are **synchronous** with respect to the interrupt source but are **asynchronous**, with respect to the top half, and the software can't depend on having a specific process running when an interrupt occurs. 
+
+  Thus, the state information for the process that initiated the activity is not available.
+
+- 3.4: Why does the system defer as much work as possible from high-priority interrupts to lower-priority software-interrupt processes?
+  
+  High-priority interrupts are critical operations, they need to run as quick as possible. So the system moves as much work as possible from them to lower-priority processes.
