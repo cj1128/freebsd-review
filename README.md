@@ -11,6 +11,8 @@
 
 ## Chapter 1: History and Goals
 
+TBC.
+
 ## Chapter 2: Design Overview of FreeBSD
 
 ### Exercises
@@ -116,4 +118,48 @@
 
 - 3.4: Why does the system defer as much work as possible from high-priority interrupts to lower-priority software-interrupt processes?
   
-  High-priority interrupts are critical operations, they need to run as quick as possible. So the system moves as much work as possible from them to lower-priority processes.
+  High-priority interrupts are critical operations, nearly all other activity in the system is blocked while they are running. They need to run as quick as possible, So the system moves as much work as possible from them to lower-priority processes.
+
+- 3.5: What determines the shortest (nonzero) time period that a user process can request when setting a timer?
+
+  The clock interrupt rate determines how often the `hardclock` routine will be called, `hardclock` will call `softclock`, which will process the real-time timer.
+
+- 3.6: How does the kernel determine the system call for which it has been invoked?
+
+  When user processe requests a system call, it will pass a system-call nubmer as a paramter, kernel determines the system call based on this number.
+
+- 3.7: How are initialized data represented in an executable file? How are uninitialized data represented in an executable file? Why are the representations different?
+
+  Initialized data are stored in the executable file, uninitialized data are not contained in the executable file because they can be created on demand using zero-filled memory.
+
+- 3.8: Describe how the `#!` mechanism can be used to make programs that require emulation appear as though they were normal exectuables.
+
+  An executable file is initially parsed by the image activation framework. The header of a file to be executed is passed through a list of registered image activators to find a matching format.
+
+  When files have as their magic number the two-character sequence `#!` followed by the pathname of the interpreter to be used, the image activator that will be selected is the one that handles the invocation of interpreters.
+  It will load and runt the named interpreter, passing the name of the file that is to be executed as an argument.
+
+- 3.9: What facilities does the DTrace facility provide that is not available in the ktrace facility?
+
+  - collect information other than system calls
+  - control the information we want to collect
+
+- 3.10: Describe the security implications of not zero filling the stack region at program startup.
+
+  programs can read data from previously running programs, this may leak some secret data.
+
+- 3.11: Why is the conversion from UTC to local time done by user processes rather than in the kernel?
+ 
+  Time conversion is complicated and kernel doesn't need local time to work, so it's better to be done by user processes to make kernel small.
+
+- 3.12: What is the advantage of having the kernel rather than an application restart an interrupted system call?
+
+  + simplify application code, it doesn't need to be aware of system call restarting
+  + save context-switch time, no need to switch to user mode and switch back
+  + save data-copying time, no need to copy data from user space to kernel space
+
+- 3.13
+- 3.14
+- 3.15
+
+  TBC.
